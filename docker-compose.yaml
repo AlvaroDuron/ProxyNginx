@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  cms-application:
+    build: ./cms-application
+    command: npm start
+    ports:
+      - "5000:5000"
+  next-application:
+    build: ./next-application
+    command: npm start
+    ports:
+      - "3000:3000"    
+  nginx:
+    image: nginx:1.13 # this will use the latest version of 1.13.x
+    ports:
+      - '80:80' # expose 80 on host and sent to 80 in container
+      - '8080:8080' # expose 80 on host and sent to 80 in container
+    depends_on: 
+      - cms-application
+      - next-application
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro    
